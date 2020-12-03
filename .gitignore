@@ -1,0 +1,21 @@
+# Slurm files
+submit.sh
+slurm.out
+
+# Dice files (in case they aren't cleaned up)
+*.bkp
+shci.e
+*.dat
+
+# Data directories/files
+_molden
+_data
+_logs
+_slurm
+_figures
+*.json
+*.npy
+*.out
+
+# VSCode
+.vscode
