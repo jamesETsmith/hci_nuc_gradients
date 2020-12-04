@@ -53,7 +53,9 @@ if vHCISCF_AA:
     mc3.mc2step()
 
     mc3.internal_rotation = True
-    mc3.max_cycle_macro = 150
+    mc3.max_cycle_macro = 300
+    mc3.conv_tol = 1e-6
+    mc3.conv_tol_grad = np.sqrt(mc3.conv_tol)
     mc3.mc2step()
 
     grad3 = mc3.Gradients().kernel()
@@ -91,7 +93,9 @@ if HCISCF_AA:
     mc5.mc2step()
 
     mc5.internal_rotation = True
-    mc5.max_cycle_macro = 150
+    mc5.max_cycle_macro = 300
+    mc5.conv_tol = 3e-6
+    mc5.conv_tol_grad = np.sqrt(mc5.conv_tol)
     mc5.mc2step()
 
     grad5 = mc5.Gradients().kernel()

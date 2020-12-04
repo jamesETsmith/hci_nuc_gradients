@@ -4,7 +4,7 @@
 mkdir -p _figures _data _logs
 
 # Generate data
-python n2_run_all.py
+python sc2_run_all.py
 python plot_grad.py
 
 # Check for converged in MCSCF

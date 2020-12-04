@@ -15,10 +15,10 @@ n_atom = casscf.shape[0]
 shci_grads = [vhciscf, vhciscf_aa, hciscf, hciscf_aa]
 shci_errors = [np.linalg.norm(casscf - gr) for gr in shci_grads]
 
+print(shci_errors)
 print(casscf)
-print("HCISCF Gradient Errors\n", shci_errors)
-# for gr in shci_grads:
-#     print(gr[0][2])
+for gr in shci_grads:
+    print(gr[0][2])
 
 
 #
@@ -37,6 +37,6 @@ plt.xticks(np.arange(len(tick_label)), tick_label)
 plt.ylabel(r"$\mathcal{l}_2$ Norm of Gradient Error (Ha/Bohr)", fontsize=fs)
 plt.title("Gradient Error as a Function of Method Variant", fontsize=fs * 1.2)
 plt.tight_layout()
-plt.savefig("_figures/n2_single_point_error.png", dpi=600)
-plt.savefig("_figures/n2_single_point_error.pdf")
+plt.savefig("_figures/Sc2_single_point_error.png", dpi=600)
+plt.savefig("_figures/Sc2_single_point_error.pdf")
 

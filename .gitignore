@@ -2,10 +2,18 @@
 submit.sh
 slurm.out
 
+# Python files
+__pycache__
+*.pyc
+
 # Dice files (in case they aren't cleaned up)
 *.bkp
 shci.e
 *.dat
+FCIDUMP
+spatial1RDM.0.0.txt
+spatialRDM.0.0.txt
+spin1RDM.0.0.txt
 
 # Data directories/files
 _molden
@@ -13,9 +21,11 @@ _data
 _logs
 _slurm
 _figures
+_chk
 *.json
 *.npy
 *.out
+*.chk
 
 # VSCode
 .vscode

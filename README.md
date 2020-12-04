@@ -30,6 +30,9 @@ In general, most directories contain bash scripts called `run_all.sh` which auto
 
 ## Software Version Details and Requirements
 
+### DFT 
+- Gaussian16
+### HCISCF
 - PySCF
 - Matplotlib
 - Seaborn
@@ -40,10 +43,10 @@ In general, most directories contain bash scripts called `run_all.sh` which auto
 
 ### Gradients
 - [X] FD Tests
-- [ ] N2 Single point
-- [ ] N2 eps1 convergence
-- [ ] Sc2 Single point
-- [ ] Sc2 eps1 convergence
+- [X] N2 Single point
+- [X] N2 eps1 convergence
+- [X] Sc2 Single point
+- [X] Sc2 eps1 convergence
 
 ### DFT
 - [ ] M06-L
@@ -52,8 +55,8 @@ In general, most directories contain bash scripts called `run_all.sh` which auto
 
 
 ### HCISCF
-- [ ] Fe(PDI) Big CAS (SSG)
-- [ ] Fe(PDI) Big CAS (TSG)
+- [ ] Fe(PDI) Big CAS (SSG) (Running)
+- [ ] Fe(PDI) Big CAS (TSG) (Running)
 
 - Fe(PDI) HCISCF (1,SSG)
   - [ ] (10e,10o)

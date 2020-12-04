@@ -25,7 +25,7 @@ def make_n2(output: str = None) -> mcscf.CASSCF:
     mol.atom = """N 0 0 0; N 0 0 1;"""
     mol.basis = "ccpvdz"
     mol.verbose = 4
-    mol.symmetry = False
+    mol.symmetry = True
     if output is not None:
         mol.output = output
     mol.build()
