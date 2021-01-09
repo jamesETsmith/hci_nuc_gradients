@@ -1,0 +1,4 @@
+%NProcShared=24
+%Mem=80GB
+%Chk=MN15_3_C.chk
+#p UMN15/def2TZVP SCF=XQC DensityFit OPT FREQ GEOM=AllCheckpoint Guess=Read

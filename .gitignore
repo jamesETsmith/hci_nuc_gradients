@@ -29,3 +29,9 @@ _chk
 
 # VSCode
 .vscode
+
+# Gaussian files
+*.log
+*.cub
+*.fchk
+*.chk

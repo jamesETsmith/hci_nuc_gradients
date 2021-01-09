@@ -1,0 +1,4 @@
+%NProcShared=24
+%Mem=80GB
+%Chk=M062X_1_A.chk
+#p UM062X/def2TZVP SCF=XQC DensityFit OPT FREQ GEOM=AllCheckpoint Guess=Read
