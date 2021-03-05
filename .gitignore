@@ -1,3 +1,6 @@
+# Project dirs
+geometry_opt/_hciscf_old
+
 # Slurm files
 submit.sh
 slurm.out
@@ -11,6 +14,8 @@ __pycache__
 shci.e
 *.dat
 FCIDUMP
+FCIDUMP_INITIAL
+FCIDUMP_FINAL
 spatial1RDM.0.0.txt
 spatialRDM.0.0.txt
 spin1RDM.0.0.txt

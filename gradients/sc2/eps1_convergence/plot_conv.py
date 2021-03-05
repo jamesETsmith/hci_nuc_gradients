@@ -34,7 +34,8 @@ print(hciscf_err)
 label = ["vHCISCF", "vHCISCF + AA", "HCISCF", "HCISCF + AA"]
 
 plt.figure()
-sns.set_style("darkgrid")
+sns.set_palette(["#" + x for x in ["ff595e", "ffca3a", "1982c4", "6a4c93"]])
+sns.set_style("ticks")
 
 plt.loglog(epsilon1, vhciscf_err, "o-", label=label[0])
 plt.loglog(epsilon1, vhciscf_aa_err, "o-", label=label[1])
@@ -56,7 +57,8 @@ plt.xlim((epsilon1[0] * 1.1, epsilon1[-1]))
 plt.xlabel(r"$\epsilon_1$ (Ha)")
 plt.ylabel("Norm of Gradient Error (Ha/Bohr)")
 plt.title(r"Gradient Error as a Function of $\epsilon_1$")
-plt.legend()
+plt.ylim((1e-7, 3e-2))
+plt.legend(framealpha=1.0)
 
 plt.tight_layout()
 plt.savefig("_figures/sc2_eps1_conv2.pdf")

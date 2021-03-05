@@ -34,42 +34,48 @@ In general, most directories contain bash scripts called `run_all.sh` which auto
 - Gaussian16
 ### HCISCF
 - PySCF
+
+### Analysis
 - Matplotlib
 - Seaborn
 - Pandas
+- rmsd
+- cclib
 
 
 ## TODOs
 
 ### Gradients
 - [X] FD Tests
+- [ ] FD as a function of epsilon_1
 - [X] N2 Single point
 - [X] N2 eps1 convergence
 - [X] Sc2 Single point
 - [X] Sc2 eps1 convergence
 
 ### DFT
-- [ ] M06-L
-- [ ] M06-2X
-- [ ] MN15
+- [X] M06-L 
+- [X] M06-2X
+- [X] MN15  
 
 
 ### HCISCF
-- [ ] Fe(PDI) Big CAS (SSG) (Running)
-- [ ] Fe(PDI) Big CAS (TSG) (Running)
+- [X] Fe(PDI) Big CAS (1,A)
+- [ ] Fe(PDI) Big CAS (3,B)
+- [X] Fe(PDI) Big CAS (3,C)
 
-- Fe(PDI) HCISCF (1,SSG)
-  - [ ] (10e,10o)
-  - [ ] (20e,20o)
+- Fe(PDI) HCISCF (1,A)
+  - [X] (10e,10o) (Running)
+  - [X] (20e,20o) (Running)
+  - [X] (30e,30o) (Running)
+  - [X] (40e,40o) (Running)
+- Fe(PDI) HCISCF (3,A)
+  - [X] (10e,10o) (Running)
+  - [X] (20e,20o) (Running)
+  - [X] (30e,30o) (Running)
+  - [ ] (40e,40o) (Running)
+- Fe(PDI) HCISCF (1,C)
+  - [X] (10e,10o)
+  - [X] (20e,20o)
   - [ ] (30e,30o)
-  - [ ] (40e,40o)
-- Fe(PDI) HCISCF (3,SSG)
-  - [ ] (10e,10o)
-  - [ ] (20e,20o)
-  - [ ] (30e,30o)
-  - [ ] (40e,40o)
-- Fe(PDI) HCISCF (1,TSG)
-  - [ ] (10e,10o)
-  - [ ] (20e,20o)
-  - [ ] (30e,30o)
-  - [ ] (40e,40o)
+  - [X] (40e,40o)

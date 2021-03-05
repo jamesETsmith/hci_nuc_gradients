@@ -27,15 +27,14 @@ for gr in shci_grads:
 tick_label = ["vHCISCF", "vHCISCF + AA", "HCISCF", "HCISCF + AA"]
 
 plt.figure()
-sns.set_style("darkgrid")
-sns.set_palette("muted")
-fs = 14  # Fontsize
+sns.set_palette(["#" + x for x in ["ff595e", "ffca3a", "1982c4", "6a4c93"]])
+sns.set_style("ticks")
 
 sns.barplot(np.arange(len(shci_errors)), shci_errors)
 plt.xticks(np.arange(len(tick_label)), tick_label)
 
-plt.ylabel(r"$\mathcal{l}_2$ Norm of Gradient Error (Ha/Bohr)", fontsize=fs)
-plt.title("Gradient Error as a Function of Method Variant", fontsize=fs * 1.2)
+plt.ylabel(r"$\mathcal{l}_2$ Norm of Gradient Error (Ha/Bohr)")
+plt.title("Gradient Error as a Function of Method Variant")
 plt.tight_layout()
 plt.savefig("_figures/Sc2_single_point_error.png", dpi=600)
 plt.savefig("_figures/Sc2_single_point_error.pdf")

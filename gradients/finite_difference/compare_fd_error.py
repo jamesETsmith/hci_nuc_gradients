@@ -42,7 +42,10 @@ print(df)
 #
 # Plot
 #
-sns.set_style("darkgrid")
+sns.set_palette("muted")
+sns.set_style("ticks")
+sns.set_context("paper")
+
 g = sns.catplot(
     x="h", y="error_five_pt", hue="method", data=df, kind="bar", palette="muted"
 )

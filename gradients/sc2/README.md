@@ -1,4 +1,4 @@
-# Sc Dimer Gradients as a Function of Method Flavor
+# Sc$_2$ Gradients Data
 
 Calculations to generate the $Sc_2$ Single Pt. figure where we show the error in gradients as a function of which method we use.
 
@@ -10,12 +10,4 @@ sh run_all.sh
 cd ../eps1_convergence
 sh run_all.sh
 ```
-
-## Results
-
-- FCI space size is 154224 determinants (setting $\epsilon_1 = 0$)
-
-![](single_point_error.png)
-
-- The results vary somewhat from run to run for the active-active rotations, in particular the hciscf_aa error varies in the first sig fig.
-  - Below are output of `plot_grad.py` from two different calculations of vhciscf_aa and hciscf_aa.
+> NOTE: If you want to reproduce the $\epsilon_1$ convergence data for N$_2$, you should run [`single_point`](single_point/) first (using [`run_all.sh`](single_point/run_all.sh)) because the [plotting script](eps1_convergence/plot_conv.py) relies on some of the data produced during those calculations.
