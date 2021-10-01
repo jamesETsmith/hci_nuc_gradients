@@ -40,6 +40,7 @@ for m in multiplicity:
             raise AssertionError(
                 f"Something went wrong with selecting data for species {m}_{g}"
             )
+        df_m_g = df_m_g[df_m_g["Stable"]].reset_index(drop=True)
         print(df_m_g.sort_values(by="Energy (Ha)"))
         most_stable = df_m_g.iloc[df_m_g["Energy (Ha)"].idxmin()]
         df_m_g.sort_values(by="Energy (Ha)").to_csv(f"_data/by_species/{m}_{g}.csv")
@@ -49,33 +50,10 @@ for m in multiplicity:
         )
 
 df_most_stable = df_most_stable.T
-print(df_most_stable.columns)
-columns = [
-    "Multiplicity",
-    "Geometry",
-    "SCF Converged",
-    "Stable",
-    "DFT Opt. Strategy",
-    "UHF Opt. Strategy",
-    "Fe Spin Density",
-    "Energy (Ha)",
-    "<S^2>",
-    "HONO-1",
-    "HONO",
-    "LUNO",
-    "LUNO+1",
-]
-df_most_stable = df_most_stable[columns]
 print(df_most_stable)
 df_most_stable.to_csv("_data/uhf_survey_most_stable.csv")
-df_most_stable.drop(columns=["SCF Converged", "Stable"]).to_html(
-    "_data/uhf_survey_most_stable.html", index=False
-)
 
-# Filter out unstable results
-df = df[~df["Stable"].isin([False])]
-# df = df[~df["SCF Converged"].isin([False])]
-
+#
 sns.set_context("talk")
 sns.set_style("ticks")
 g = sns.catplot(
@@ -85,9 +63,8 @@ g = sns.catplot(
     row="Multiplicity",
     col="Geometry",
     hue="DFT Opt. Strategy",
-    s=12,
 )
 plt.ticklabel_format(axis="y", useOffset=False)
 g.fig.subplots_adjust(left=0.12)
+plt.ylim((-2497.6, -2497.3))
 plt.savefig("_figures/uhf_most_stable.png", dpi=600)
-plt.savefig("_figures/uhf_most_stable.pdf")
