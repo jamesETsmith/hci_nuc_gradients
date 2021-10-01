@@ -40,3 +40,7 @@ _chk
 *.cub
 *.fchk
 *.chk
+
+# Images
+*.png
+*.html
