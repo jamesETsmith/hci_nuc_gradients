@@ -78,8 +78,8 @@ for dft_opt in dft_opt_strategies:
     series = []
     for s in states:
         for opt in opt_stategies:
-            noon_file = f"../../uhf_survey/{dft_opt}/{s}/_data/uhf_{s}_{opt}_noons.txt"
-            log_file = f"../../uhf_survey/{dft_opt}/{s}/_logs/uhf_{s}_{opt}.out"
+            noon_file = f"../../uhf_survey_tz/{dft_opt}/{s}/_data/uhf_{s}_{opt}_noons.txt"
+            log_file = f"../../uhf_survey_tz/{dft_opt}/{s}/_logs/uhf_{s}_{opt}.out"
             series.append(get_scf_data(log_file, noon_file, s, opt))
 
     df = pd.concat(

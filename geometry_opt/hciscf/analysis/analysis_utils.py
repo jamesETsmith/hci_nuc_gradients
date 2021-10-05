@@ -1,8 +1,11 @@
 import os
 import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
 from scipy.stats import linregress
 from scipy.optimize import curve_fit
+from rmsd import kabsch_rmsd
 
 #
 # Tools for geomeTRIC
@@ -15,7 +18,7 @@ def parse_multi_XYZ(filename: str) -> list:
 
     n_atoms = int(lines[0].split()[0])
     n_iter = int((len(lines)) / (n_atoms + 2))
-    print(len(lines), n_iter)
+    # print(len(lines), n_iter)
     assert (len(lines)) % (n_atoms + 2) == 0
 
     geometries = []  #  in Bohr
@@ -39,7 +42,7 @@ def parse_multi_XYZ(filename: str) -> list:
 
 
 def get_shci_data(filename: str) -> dict:
-    data = {"var": 0, "pt": 0, "pt uncertainty": 1}
+    data = {"var": 0.0, "pt": 0.0, "pt uncertainty": 1.0}
 
     if not os.path.exists(filename):
         print(f"WARNING: {filename} not found, returning 0")
@@ -56,19 +59,22 @@ def get_shci_data(filename: str) -> dict:
         if "Root" in line and "Davidson" not in line:
             data["var"] = float(lines[i + 1].split()[1])
 
+    if data["pt"] == 0.0 and data["pt uncertainty"] == 1.0:
+        print(f"Getting SHCI data from {filename} FAILED")
+
     return data
 
 
-def extrapolate(base_dir: str) -> dict:
+def extrapolate(
+    data: pd.DataFrame, species: str, cas: str, initial_or_final: str
+) -> dict:
 
-    data = pd.DataFrame()
-    for i in range(10):
-        path = os.path.join(base_dir, f"output_{i}.dat")
-        data = data.append(get_shci_data(path), ignore_index=True)
+    if initial_or_final != "initial" and initial_or_final != "final":
+        raise ValueError("initial_or_final must be either 'initial' or 'final'")
 
-    data["pt correction"] = data["pt"] - data["var"]
-
+    #
     # Fitting with Error
+    #
     fit_x = np.linspace(data["pt correction"].min(), 0)
 
     def linear(x, m, b):
@@ -107,12 +113,51 @@ def extrapolate(base_dir: str) -> dict:
         f"Quadratic Fit Intercept {quad_intercept:.6f} \u00B1 {quad_int_uncert:.1e} (Ha)"
     )
     extrap_data = {
-        "Method": figure_name,
+        "Multiplicity": species[0],
+        "Geometry": species[2],
+        "Initial/Final": initial_or_final,
+        "CAS": cas,
         "Linear Fit Int. (Ha)": lin_intercept,
         "Linear Fit Int. Uncertainty (Ha)": lin_int_uncert,
         "Quadratic Fit Int. (Ha)": quad_intercept,
         "Quadratic Fit Int. Uncertainty (Ha)": quad_int_uncert,
+        "Linear Slope": lin_popt[0],
+        # "fit_x": fit_x,
+        # "lin_fit": linear(fit_x, lin_popt[0], lin_popt[1]),
+        # "quad_fit": quadratic(fit_x, quad_popt[0], quad_popt[1], quad_popt[2]),
     }
+
+    #
+    # Plot
+    #
+    plt.figure()
+    sns.set_style("ticks")
+    sns.set_palette("muted")
+    sns.set_context("talk")
+
+    # plt.errorbar(
+    #     data["pt correction"], data["pt"], yerr=data["pt uncertainty"], label="Data"
+    # )
+    # Error bars here are smaller than the circles =)
+    plt.plot(data["pt correction"], data["pt"], "o", label="Data")
+    plt.plot(fit_x, linear(fit_x, lin_popt[0], lin_popt[1]), label="Linear Fit")
+    plt.plot(
+        fit_x,
+        quadratic(fit_x, quad_popt[0], quad_popt[1], quad_popt[2]),
+        label="Quad. Fit",
+    )
+    plt.ticklabel_format(style="sci", axis="x", scilimits=(0, 0))
+
+    plt.xlabel("$E_2$ (Ha)")
+    plt.ylabel(r"E$_{SHCI}$ (Ha)")
+    plt.title(f"{species} {cas} {initial_or_final}")
+    plt.gca().get_yaxis().get_major_formatter().set_useOffset(False)
+    plt.gca().get_yaxis().get_major_formatter().set_scientific(False)
+    plt.legend()
+    plt.tight_layout()
+    os.makedirs("_figures", exist_ok=True)
+    plt.savefig(f"_figures/{species}_{cas}_{initial_or_final}.png", dpi=600)
+    plt.savefig(f"_figures/{species}_{cas}_{initial_or_final}.pdf")
 
     return extrap_data
 
@@ -159,12 +204,82 @@ def calculate_bond_angle(indices: list, geom: np.ndarray) -> float:
     return 180 * alpha / np.pi
 
 
+def tabulate_geometry_errors(path: str):
+    """Return the errors in the initial and final geometry.
+
+    Parameters
+    ----------
+    path : str
+        [description]
+    """
+
+    _, geometries, _ = parse_multi_XYZ(path)
+
+    initial_geom = geometries[0]
+    final_geom = geometries[-1]
+    print(
+        f"Difference between first and last geometry {kabsch_rmsd(initial_geom, final_geom)}"
+    )
+
+    initial_data = {"Bond": [], "Error": []}
+    final_data = {"Bond": [], "Error": []}
+    for dp in stieber_data:
+        if len(dp) == 4:
+            # Calculate error at initial
+            bl = calculate_bl(dp[2:], initial_geom)
+            initial_data["Bond"].append(dp[0])
+            initial_data["Error"].append(abs(bl - dp[1]))
+
+            # Calculate error at final
+            bl = calculate_bl(dp[2:], final_geom)
+            final_data["Bond"].append(dp[0])
+            final_data["Error"].append(abs(bl - dp[1]))
+
+    return pd.DataFrame(initial_data), pd.DataFrame(final_data)
+
+
+def parse_mcscf_energies(filename: str) -> np.ndarray:
+    with open(filename, "r") as f:
+        lines = f.readlines()
+
+    mcscf_energies = []
+
+    for i, li in enumerate(lines):
+        if "CASSCF E" in li:
+            mcscf_energies.append(float(li.split()[10]))
+
+    return np.array(mcscf_energies)
+
+
+def get_natural_orbital_energy(filename: str) -> float:
+    with open(filename, "r") as f:
+        lines = f.readlines()
+
+    for i, li in enumerate(lines):
+        if "In Natural orbital, CASCI energy" in li:
+            energy = float(li.split()[-1])
+            return energy
+
+
+def get_hci_size(filename: str) -> int:
+
+    with open(filename, "r") as f:
+        lines = f.readlines()
+
+    for i, li in enumerate(lines):
+        # Don't break here in case we want to use this on an MCSCF output
+        if "Performing final tight davidson with tol" in li:
+            n_dets = int(lines[i - 1].split()[3])
+            # print(n_dets)
+
+    return n_dets
+
+
 #
 # Helpers for making tables
 #
 def format_exponential(x: float) -> str:
-    """Format exponential float values to look pretty in LaTeX.
-    """
+    """Format exponential float values to look pretty in LaTeX."""
     if x == 0:
         return "0.0"
 

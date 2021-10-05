@@ -1,13 +1,7 @@
 import os
-import sys
 import pandas as pd
-import matplotlib as mpl
 import matplotlib.pyplot as plt
-
 import seaborn as sns
-
-sys.path.append("../")
-from plotting_utils import set_context, set_palette
 
 # Gather data
 df_diis = pd.read_csv("_data/uhf_survey_FN_DIIS.csv", index_col=0)
@@ -19,7 +13,7 @@ df_nofn_adiis = pd.read_csv("_data/uhf_survey_ADIIS.csv", index_col=0)
 
 # Add columns for DFT Opt Strategy and combine dataframes
 dfs = [df_diis, df_adiis, df_nofn_diis, df_nofn_adiis, df_newton]
-dft_opt_strategy = ["Fast Newton+DIIS", "Fast Newton+ADIIS", "DIIS", "ADIIS", "NEWTON"]
+dft_opt_strategy = ["Fast_Newton+DIIS", "Fast_Newton+ADIIS", "DIIS", "ADIIS", "NEWTON"]
 
 for i, df in enumerate(dfs):
     df["DFT Opt. Strategy"] = [dft_opt_strategy[i]] * len(df.index)
@@ -46,6 +40,7 @@ for m in multiplicity:
             raise AssertionError(
                 f"Something went wrong with selecting data for species {m}_{g}"
             )
+        df_m_g = df_m_g[df_m_g["Stable"]].reset_index(drop=True)
         print(df_m_g.sort_values(by="Energy (Ha)"))
         most_stable = df_m_g.iloc[df_m_g["Energy (Ha)"].idxmin()]
         df_m_g.sort_values(by="Energy (Ha)").to_csv(f"_data/by_species/{m}_{g}.csv")
@@ -55,41 +50,12 @@ for m in multiplicity:
         )
 
 df_most_stable = df_most_stable.T
-print(df_most_stable.columns)
-columns = [
-    "Multiplicity",
-    "Geometry",
-    "SCF Converged",
-    "Stable",
-    "DFT Opt. Strategy",
-    "UHF Opt. Strategy",
-    "Fe Spin Density",
-    "Energy (Ha)",
-    "<S^2>",
-    "HONO-1",
-    "HONO",
-    "LUNO",
-    "LUNO+1",
-]
-df_most_stable = df_most_stable[columns]
 print(df_most_stable)
 df_most_stable.to_csv("_data/uhf_survey_most_stable.csv")
-df_most_stable.drop(columns=["SCF Converged", "Stable"]).to_html(
-    "_data/uhf_survey_most_stable.html", index=False
-)
-
-# Filter out unstable results
-df = df[~df["Stable"].isin([False])]
-# df = df[~df["SCF Converged"].isin([False])]
 
 #
-# sns.set_context("talk")
-# sns.set_style("ticks")
-set_context("paper", 1.5)
-set_palette(7)
-# mpl.rcParams.update({"font.size": 64})
-
-
+sns.set_context("talk")
+sns.set_style("ticks")
 g = sns.catplot(
     data=df,
     x="UHF Opt. Strategy",
@@ -97,12 +63,8 @@ g = sns.catplot(
     row="Multiplicity",
     col="Geometry",
     hue="DFT Opt. Strategy",
-    s=12,
 )
-# mpl.rcParams.update({"font.size": 64})
-# sns.set_context("notebook", font_scale=1.4)
-
 plt.ticklabel_format(axis="y", useOffset=False)
 g.fig.subplots_adjust(left=0.12)
+plt.ylim((-2497.6, -2497.3))
 plt.savefig("_figures/uhf_most_stable.png", dpi=600)
-plt.savefig("_figures/uhf_most_stable.pdf")
