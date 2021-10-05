@@ -3,13 +3,13 @@ import numpy as np
 import pandas as pd
 import matplotlib
 import seaborn as sns
+import matplotlib.pyplot as plt
 
+import sys
+sys.path.append("..")
+from plotting_utils import set_context, set_palette
 # The the same font throughout
-plt = matplotlib.pyplot
-matplotlib.rcParams["mathtext.fontset"] = "custom"
-matplotlib.rcParams["mathtext.rm"] = "DejaVu Sans"
-matplotlib.rcParams["mathtext.it"] = "DejaVu Sans"
-matplotlib.rcParams["mathtext.bf"] = "DejaVu Sans:bold"
+
 
 # Setup output dirs
 os.makedirs("_figs", exist_ok=True)
@@ -19,8 +19,8 @@ df = pd.read_csv("_data/mcscf_eps1_sensitivity.csv")
 print(df)
 
 # Set theme
-# sns.set_theme(context="talk", style="ticks", palette="muted")
-sns.set_theme(style="ticks", palette="muted")
+set_palette(2)
+set_context("paper")
 
 # Plot Energies
 plt.figure()

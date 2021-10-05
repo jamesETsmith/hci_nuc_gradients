@@ -1,7 +1,11 @@
+import sys
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
+
+sys.path.append("../")
+from plotting_utils import set_context, set_palette
 
 df = pd.read_csv("_data/40e_40o_initial_extrap_comparison.csv")
 df_full = pd.read_csv("_data/40e_40o_initial_energy_comparison_full.csv")
@@ -30,8 +34,10 @@ plt.close()
 #
 # Plot Extrapolation Comparison
 #
+set_palette(3)
+set_context("paper")
 f, (ax1, ax2) = plt.subplots(1, 2, sharey=True)
-sns.set_palette("muted")
+# sns.set_palette("muted")
 # sns.set_context("talk")
 
 
@@ -82,7 +88,7 @@ ax2.set_title("Triplet")
 plt.tight_layout()
 plt.savefig("_figures/initial_extrapolation_summary.png", dpi=600)
 plt.savefig("_figures/initial_extrapolation_summary.pdf")
-
+plt.close()
 
 #
 # Plot Final Comparison
@@ -90,8 +96,10 @@ plt.savefig("_figures/initial_extrapolation_summary.pdf")
 df = pd.read_csv("_data/40e_40o_final_extrap_comparison.csv")
 df_full = pd.read_csv("_data/40e_40o_final_energy_comparison_full.csv")
 
+set_palette(3)
+set_context("paper")
 f, (ax1, ax2) = plt.subplots(1, 2, sharey=True)
-sns.set_palette("muted")
+# sns.set_palette("muted")
 # sns.set_context("talk")
 
 
@@ -140,5 +148,6 @@ ax1.set_title("Singlet")
 ax2.set_title("Triplet")
 
 plt.tight_layout()
-# plt.savefig("_figures/final_extrapolation_summary.png", dpi=600)
+plt.savefig("_figures/final_extrapolation_summary.png", dpi=600)
 plt.savefig("_figures/final_extrapolation_summary.pdf")
+plt.close()

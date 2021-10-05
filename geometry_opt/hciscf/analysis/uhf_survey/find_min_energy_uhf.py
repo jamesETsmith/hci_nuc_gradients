@@ -1,7 +1,13 @@
 import os
+import sys
 import pandas as pd
+import matplotlib as mpl
 import matplotlib.pyplot as plt
+
 import seaborn as sns
+
+sys.path.append("../")
+from plotting_utils import set_context, set_palette
 
 # Gather data
 df_diis = pd.read_csv("_data/uhf_survey_FN_DIIS.csv", index_col=0)
@@ -13,7 +19,7 @@ df_nofn_adiis = pd.read_csv("_data/uhf_survey_ADIIS.csv", index_col=0)
 
 # Add columns for DFT Opt Strategy and combine dataframes
 dfs = [df_diis, df_adiis, df_nofn_diis, df_nofn_adiis, df_newton]
-dft_opt_strategy = ["Fast_Newton+DIIS", "Fast_Newton+ADIIS", "DIIS", "ADIIS", "NEWTON"]
+dft_opt_strategy = ["Fast Newton+DIIS", "Fast Newton+ADIIS", "DIIS", "ADIIS", "NEWTON"]
 
 for i, df in enumerate(dfs):
     df["DFT Opt. Strategy"] = [dft_opt_strategy[i]] * len(df.index)
@@ -76,8 +82,14 @@ df_most_stable.drop(columns=["SCF Converged", "Stable"]).to_html(
 df = df[~df["Stable"].isin([False])]
 # df = df[~df["SCF Converged"].isin([False])]
 
-sns.set_context("talk")
-sns.set_style("ticks")
+#
+# sns.set_context("talk")
+# sns.set_style("ticks")
+set_context("paper", 1.5)
+set_palette(7)
+# mpl.rcParams.update({"font.size": 64})
+
+
 g = sns.catplot(
     data=df,
     x="UHF Opt. Strategy",
@@ -87,6 +99,9 @@ g = sns.catplot(
     hue="DFT Opt. Strategy",
     s=12,
 )
+# mpl.rcParams.update({"font.size": 64})
+# sns.set_context("notebook", font_scale=1.4)
+
 plt.ticklabel_format(axis="y", useOffset=False)
 g.fig.subplots_adjust(left=0.12)
 plt.savefig("_figures/uhf_most_stable.png", dpi=600)

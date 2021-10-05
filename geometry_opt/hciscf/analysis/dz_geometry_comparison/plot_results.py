@@ -1,18 +1,16 @@
-import os
+import os, sys
 import numpy as np
 import pandas as pd
-import matplotlib
 import seaborn as sns
+import matplotlib.pyplot as plt
 
-plt = matplotlib.pyplot
+sys.path.append("../")
+from plotting_utils import set_context, set_palette
+
 os.makedirs("_figs", exist_ok=True)
-matplotlib.rcParams["mathtext.fontset"] = "custom"
-matplotlib.rcParams["mathtext.rm"] = "DejaVu Sans"
-matplotlib.rcParams["mathtext.it"] = "DejaVu Sans"
-matplotlib.rcParams["mathtext.bf"] = "DejaVu Sans:bold"
-# sns.set_theme(context="paper", style="ticks", palette="muted")
-sns.set_theme(style="ticks", palette="muted")
 
+set_context("paper")
+set_palette(2)
 
 states = ["1_A", "1_B", "1_C", "3_A", "3_B", "3_C"]
 
