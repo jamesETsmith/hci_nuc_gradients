@@ -3,7 +3,9 @@ geometry_opt/_hciscf_old
 
 # Slurm files
 submit.sh
+*submit*.sh
 slurm.out
+.slurm.out
 
 # Python files
 __pycache__
@@ -27,6 +29,12 @@ _logs
 _slurm
 _figures
 _chk
+*_molden*
+*_data*
+*_logs*
+*_slurm*
+*_figures*
+*_chk*
 *.json
 *.npy
 *.out
@@ -44,3 +52,4 @@ _chk
 # Images
 *.png
 *.html
+*.pdf
