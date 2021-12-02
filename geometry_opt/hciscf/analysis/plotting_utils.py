@@ -26,6 +26,7 @@ def set_palette(n_colors: int = 7):
     # Dictionary to store some preset subsets of the full palette
     subset = {
         7: np.arange(7),
+        5: np.array([1, 0, 2, 3, 5]),
         4: np.array([0, 1, 3, 5]),
         3: np.array([0, 1, 3]),
         2: np.array([0, 1]),
@@ -49,7 +50,7 @@ def set_context(context: str, font_scale: float = 1.0):
 
     # Default Params for "paper"
     params = {
-        # "text.usetex": True,
+        "text.usetex": True,
         "font.family": "serif",
         "font.serif": ["DejaVu Serif"],
         "font.sans-serif": ["DejaVu Serif"],
@@ -77,7 +78,7 @@ def set_context(context: str, font_scale: float = 1.0):
 
 
 if __name__ == "__main__":
-    set_palette(3)
+    set_palette(5)
     set_context("paper")
     # mpl.rcParams.update({"font.size": 36})
 
