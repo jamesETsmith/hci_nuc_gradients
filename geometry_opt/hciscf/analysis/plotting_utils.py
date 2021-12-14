@@ -45,7 +45,7 @@ def set_context(context: str, font_scale: float = 1.0):
     #     print(font_file)
     #     print(mpl.font_manager.fontManager.addfont(font_file))
 
-    # supported_vals = ["paper", "talk"]
+    supported_vals = ["paper", "talk"]
     # print(mpl.rcParams["font.serif"])
 
     # Default Params for "paper"
