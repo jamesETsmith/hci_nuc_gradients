@@ -1,5 +1,7 @@
 # Project dirs
 geometry_opt/_hciscf_old
+old_dz
+casscf_geom_tests
 
 # Slurm files
 submit.sh
@@ -39,6 +41,7 @@ _chk
 *.npy
 *.out
 *.chk
+*.tar.gz
 
 # VSCode
 .vscode
