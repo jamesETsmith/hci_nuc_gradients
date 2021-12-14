@@ -36,6 +36,7 @@ In general, most directories contain bash scripts called `run_all.sh` which auto
 - PySCF
 
 ### Analysis
+- NumPy
 - Matplotlib
 - Seaborn
 - Pandas
@@ -43,39 +44,3 @@ In general, most directories contain bash scripts called `run_all.sh` which auto
 - cclib
 
 
-## TODOs
-
-### Gradients
-- [X] FD Tests
-- [ ] FD as a function of epsilon_1
-- [X] N2 Single point
-- [X] N2 eps1 convergence
-- [X] Sc2 Single point
-- [X] Sc2 eps1 convergence
-
-### DFT
-- [X] M06-L 
-- [X] M06-2X
-- [X] MN15  
-
-
-### HCISCF
-- [X] Fe(PDI) Big CAS (1,A)
-- [ ] Fe(PDI) Big CAS (3,B)
-- [X] Fe(PDI) Big CAS (3,C)
-
-- Fe(PDI) HCISCF (1,A)
-  - [X] (10e,10o) (Running)
-  - [X] (20e,20o) (Running)
-  - [X] (30e,30o) (Running)
-  - [X] (40e,40o) (Running)
-- Fe(PDI) HCISCF (3,A)
-  - [X] (10e,10o) (Running)
-  - [X] (20e,20o) (Running)
-  - [X] (30e,30o) (Running)
-  - [ ] (40e,40o) (Running)
-- Fe(PDI) HCISCF (1,C)
-  - [X] (10e,10o)
-  - [X] (20e,20o)
-  - [ ] (30e,30o)
-  - [X] (40e,40o)
