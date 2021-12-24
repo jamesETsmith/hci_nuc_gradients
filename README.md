@@ -1,6 +1,6 @@
 # Gradients and Geometry Optimization with HCISCF Wave Functions
 
-This repository contain all files required to reproduce the data reported in the paper title "TITLE". [ADD CITATION]
+This repository contain all files required to reproduce the data reported in the paper "Nuclear Gradients of Near-Exact Complete Active Space Self-Consistent Field Wave Functions". [ADD CITATION]
 
 If this work helped your own research efforts, please cite our work using:
 
