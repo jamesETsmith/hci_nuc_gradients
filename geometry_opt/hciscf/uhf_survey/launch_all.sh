@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# 
+ 
 for D in DIIS ADIIS FN_DIIS FN_ADIIS NEWTON
 do
 	cd $D

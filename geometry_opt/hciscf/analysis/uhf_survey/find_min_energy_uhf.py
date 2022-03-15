@@ -85,7 +85,7 @@ df = df[~df["Stable"].isin([False])]
 #
 # sns.set_context("talk")
 # sns.set_style("ticks")
-set_context("paper", 1.5)
+set_context("paper", 1.75)
 set_palette(7)
 # mpl.rcParams.update({"font.size": 64})
 

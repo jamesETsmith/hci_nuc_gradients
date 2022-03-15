@@ -238,6 +238,17 @@ def tabulate_geometry_errors(path: str):
     return pd.DataFrame(initial_data), pd.DataFrame(final_data)
 
 
+def tabulate_geometry_errors_ndarray(geom: np.ndarray):
+    data = {"Bond": [], "Error": []}
+    final_data = {"Bond": [], "Error": []}
+    for dp in stieber_data:
+        if len(dp) == 4:  # Just get bond lengths
+            bl = calculate_bl(dp[2:], geom)
+            data["Bond"].append(dp[0])
+            data["Error"].append(abs(bl - dp[1]))
+    return pd.DataFrame(data)
+
+
 def parse_mcscf_energies(filename: str) -> np.ndarray:
     with open(filename, "r") as f:
         lines = f.readlines()

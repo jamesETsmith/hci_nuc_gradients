@@ -6,8 +6,10 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 
 import sys
+
 sys.path.append("..")
 from plotting_utils import set_context, set_palette
+
 # The the same font throughout
 
 
@@ -20,13 +22,13 @@ print(df)
 
 # Set theme
 set_palette(2)
-set_context("paper")
+set_context("paper", font_scale=1.25)
 
 # Plot Energies
 plt.figure()
 
 # Plot actual data
-plt.plot(df["Epsilon1 (Ha)"], df["MCSCF Energy (Ha)"], "o-", label="MCSCF")
+plt.plot(df["Epsilon1 (Ha)"], df["MCSCF Energy (Ha)"], "o-", label="vHCISCF")
 plt.plot(df["Epsilon1 (Ha)"], df["SHCI Energy (Ha)"], "o-", label="SHCI")
 
 # Plot chemical accuracy
@@ -59,7 +61,7 @@ plt.close()
 plt.figure()
 
 # Plot actual data
-plt.semilogy(df["Epsilon1 (Ha)"], df["MCSCF Determinants"], "o-", label="MCSCF")
+plt.semilogy(df["Epsilon1 (Ha)"], df["MCSCF Determinants"], "o-", label="vHCISCF")
 plt.semilogy(df["Epsilon1 (Ha)"], df["SHCI Determinants"], "o-", label="SHCI")
 
 # Formatting
@@ -67,7 +69,7 @@ plt.legend()
 plt.xticks(df["Epsilon1 (Ha)"][::2], [f"{e:.1e}" for e in df["Epsilon1 (Ha)"][::2]])
 plt.ylim((10 ** 6, 10 ** 8))
 plt.xlabel("$\epsilon_1 (Ha)$")
-plt.ylabel("# Determinants")
+plt.ylabel("Number of Determinants")
 plt.tight_layout()
 plt.savefig("_figs/mcscf_dets_vs_eps1.png", dpi=600)
 plt.savefig("_figs/mcscf_dets_vs_eps1.pdf")

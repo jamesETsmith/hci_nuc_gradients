@@ -1,9 +1,13 @@
 # Project dirs
 geometry_opt/_hciscf_old
+old_dz
+casscf_geom_tests
 
 # Slurm files
 submit.sh
+*submit*.sh
 slurm.out
+.slurm.out
 
 # Python files
 __pycache__
@@ -27,10 +31,17 @@ _logs
 _slurm
 _figures
 _chk
+*_molden*
+*_data*
+*_logs*
+*_slurm*
+*_figures*
+*_chk*
 *.json
 *.npy
 *.out
 *.chk
+*.tar.gz
 
 # VSCode
 .vscode
@@ -44,3 +55,4 @@ _chk
 # Images
 *.png
 *.html
+*.pdf

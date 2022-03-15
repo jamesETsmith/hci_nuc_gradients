@@ -9,8 +9,9 @@ from plotting_utils import set_context, set_palette
 
 os.makedirs("_figs", exist_ok=True)
 
+
 set_context("paper")
-set_palette(2)
+set_palette(4)
 
 states = ["1_A", "1_B", "1_C", "3_A", "3_B", "3_C"]
 
@@ -19,7 +20,7 @@ for si in states:
     df = pd.read_csv(f"_data/{si}.csv")
 
     plt.figure()
-    g = sns.barplot(x="Bond", y="Error", data=df, hue="Geometry")
+    g = sns.barplot(x="Bond", y="Error", data=df, hue="Method")
     g.set_yscale("log")
 
     # Formatting

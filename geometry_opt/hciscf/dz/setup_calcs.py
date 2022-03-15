@@ -3,7 +3,7 @@ import os
 for s in [0, 2]:
     m = 2 * (s // 2) + 1
     for g in ["A", "B", "C"]:
-        for ncas in [10, 20, 30, 40, 50, 60]:
+        for ncas in [10, 20, 30, 40]:
             os.makedirs(f"{m}_{g}/{ncas}e_{ncas}o", exist_ok=True)
             eps1 = 7.5e-5
             # if ncas == 40:
