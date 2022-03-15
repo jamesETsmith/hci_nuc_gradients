@@ -116,6 +116,10 @@ for d in g16_dirs:
     elif d == "M06L_3_C":
         geom_13_bs = ccdata.atomcoords[0]
 
+    # Write geometries
+    with open("_data/{}.xyz".format(d), "w") as f:
+        writer = cclib.io.xyzwriter.XYZ(ccdata, allgeom=True)
+        f.write(writer.generate_repr())
 
 # Get RMSD compared to Ortuno and Cramer
 displacement = []
