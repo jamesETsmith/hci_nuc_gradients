@@ -1,11 +1,18 @@
 # Gradients and Geometry Optimization with HCISCF Wave Functions
 
-This repository contain all files required to reproduce the data reported in the paper "Nuclear Gradients of Near-Exact Complete Active Space Self-Consistent Field Wave Functions". [ADD CITATION]
+This repository contain all files required to reproduce the data reported in the paper ["Nuclear Gradients of Near-Exact Complete Active Space Self-Consistent Field Wave Functions"](https://arxiv.org/abs/2201.06514)
 
 If this work helped your own research efforts, please cite our work using:
 
 ```
-Citation coming soon!
+@article{smith2022nuclear,
+      title={Nuclear Gradients of Near-Exact Complete Active Space Self-Consistent Field Wave Functions}, 
+      author={James E. T. Smith and Joonho Lee and Sandeep Sharma},
+      year={2022},
+      eprint={2201.06514},
+      archivePrefix={arXiv},
+      primaryClass={physics.chem-ph}
+}
 ```
 
 ## General Organization

@@ -77,7 +77,9 @@ g16_dirs = [
 
 energies = []
 geometries = []
-species = []
+# species = []
+multiplicity = []
+starting_geom = []
 functional = []
 fe_spin = []
 spin = []
@@ -97,7 +99,9 @@ for d in g16_dirs:
     elif "MN15" in d:
         func = "MN15"
     functional.append(func)
-    species.append(f"$({d[-3]},{d[-1]})^*$")
+    # species.append(f"$({d[-3]},{d[-1]})^*$")
+    multiplicity.append(d[-3])
+    starting_geom.append(r"\textbf{" + d[-1] + r"}")
 
     # Get general info
     geometries.append(ccdata.atomcoords[-1])
@@ -112,33 +116,43 @@ for d in g16_dirs:
     elif d == "M06L_3_C":
         geom_13_bs = ccdata.atomcoords[0]
 
+    # Write geometries
+    with open("_data/{}.xyz".format(d), "w") as f:
+        writer = cclib.io.xyzwriter.XYZ(ccdata, allgeom=True)
+        f.write(writer.generate_repr())
 
 # Get RMSD compared to Ortuno and Cramer
 displacement = []
-natom_sqrt = np.sqrt(geometries[0].shape[1])
 
 for i, gi in enumerate(geometries):
     comp_geom = geom_11_bs
     # Compare triplet geometries to Ortuno and Cramer's triplet
     if i % 3 == 1 or i % 3 == 2:
         comp_geom = geom_13_bs
-    displacement.append(kabsch_rmsd(gi, comp_geom, translate=True) / natom_sqrt)
+    displacement.append(kabsch_rmsd(gi, comp_geom, translate=True))
 
 # Collect data into a Pandas DataFrame
 df_general = pd.DataFrame(
     {
         "Functional": functional,
-        "Species": species,
+        # "Species": species,
+        "Multiplicity": multiplicity,
+        "Starting Geometry": starting_geom,
         "Energy (Ha)": energies,
         "Fe Spin Density": fe_spin,
         # r"$\ev{\hat{S}}$": spin,
         r"$\ev{\hat{S}^2}$": spin_squared,
-        "Displacements/atom from Ref. (Å)": displacement,
+        "RMSD (Å)": displacement,
     }
 )
 
 df_geom = pd.DataFrame(
-    {"Functional": functional, "Species": species, "Geometry (Å)": geometries,}
+    {
+        "Functional": functional,
+        "Multiplicity": multiplicity,
+        "Starting Geometry": starting_geom,
+        "Geometry (Å)": geometries,
+    }
 )
 
 # Save dataframes
@@ -148,13 +162,14 @@ df_geom.to_csv("_data/dft_geoms.csv")
 # Save tables for latex
 formatters = {
     "Energy (Ha)": lambda x: f"{x:.6f}",
-    "Displacements/atom from Ref. (Å)": format_exponential,
+    "RMSD (Å)": format_exponential,
 }
 df_general.round(12).to_latex(
     buf="_tables/dft_general_comp.tex",
     index=False,
     escape=False,
     formatters=formatters,
+    column_format="c" * len(df_general.columns),
 )
 
 
@@ -170,7 +185,11 @@ for d in g16_dirs:
 noons = np.array(noons)
 
 df_noons = pd.DataFrame(
-    noons.T, columns=[x + " " + y for x, y in zip(functional, species)]
+    noons.T,
+    columns=[
+        x + " " + y + " " + z
+        for x, y, z in zip(functional, multiplicity, starting_geom)
+    ],
 )
 df_noons.to_csv("_data/dft_noons.csv")
 
@@ -179,10 +198,21 @@ df_frontier_noons = pd.DataFrame(
     frontier_noons, columns=["HONO-1", "HONO", "LUNO", "LUNO+1"]
 )
 df_frontier_noons["Functional"] = functional
-df_frontier_noons["Species"] = species
+# df_frontier_noons["Species"] = species
+df_frontier_noons["Multiplicity"] = multiplicity
+df_frontier_noons["Starting Geometry"] = starting_geom
 
 df_frontier_noons = df_frontier_noons.reindex(
-    ["Functional", "Species", "HONO-1", "HONO", "LUNO", "LUNO+1"], axis=1
+    [
+        "Functional",
+        "Multiplicity",
+        "Starting Geometry",
+        "HONO-1",
+        "HONO",
+        "LUNO",
+        "LUNO+1",
+    ],
+    axis=1,
 )
 
 df_frontier_noons.to_csv("_data/dft_frontier_noons.csv")
@@ -192,7 +222,11 @@ df_frontier_noons.round(12).to_latex(
     index=False,
     escape=False,
     float_format=lambda x: f"{x:.3f}",
+    column_format="c" * len(df_frontier_noons.columns),
 )
+
+print("STOPPING EARLY")
+exit(0)
 
 #
 # Stieber Data
