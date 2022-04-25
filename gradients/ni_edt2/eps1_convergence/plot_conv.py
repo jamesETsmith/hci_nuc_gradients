@@ -11,7 +11,7 @@ os.makedirs("_figs", exist_ok=True)
 
 
 def rms_error(g1: np.ndarray, g2: np.ndarray) -> float:
-    return np.std((g1-g2).flatten())
+    return np.std((g1 - g2).flatten())
 
 
 #
@@ -21,18 +21,18 @@ epsilon1 = [1e-3, 5e-4, 1e-4, 1e-5, 1e-6]
 casscf = np.load("../single_point/_data/grad_casscf.npy")
 
 vhciscf = [np.load("_data/vhciscf_{:.1e}.npy".format(eps1)) for eps1 in epsilon1]
-vhciscf_err = [rms_error(shci,casscf) for shci in vhciscf]
+vhciscf_err = [rms_error(shci, casscf) for shci in vhciscf]
 
-vhciscf_aa = [np.load("_data/vhciscf_aa_{:.1e}.npy".format(eps1)) for eps1 in [1e-3, 5e-4, 1e-4, 1e-5]]
-vhciscf_aa_err = [rms_error(shci,casscf) for shci in vhciscf_aa]
+vhciscf_aa = [np.load("_data/vhciscf_aa_{:.1e}.npy".format(eps1)) for eps1 in epsilon1]
+vhciscf_aa_err = [rms_error(shci, casscf) for shci in vhciscf_aa]
 
 
 hciscf = [np.load("_data/hciscf_{:.1e}.npy".format(eps1)) for eps1 in epsilon1]
-hciscf_err = [rms_error(shci,casscf) for shci in hciscf]
+hciscf_err = [rms_error(shci, casscf) for shci in hciscf]
 
 # epsilon1 = [1e-3, 5e-4]
-hciscf_aa = [np.load("_data/hciscf_aa_{:.1e}.npy".format(eps1)) for eps1 in [1e-3, 5e-4, 1e-4, 1e-5]]
-hciscf_aa_err = [rms_error(shci,casscf) for shci in hciscf_aa]
+hciscf_aa = [np.load("_data/hciscf_aa_{:.1e}.npy".format(eps1)) for eps1 in epsilon1]
+hciscf_aa_err = [rms_error(shci, casscf) for shci in hciscf_aa]
 
 
 # Debug print
@@ -53,12 +53,6 @@ plt.figure()
 set_context("paper", font_scale=1.25)
 set_palette(4)
 
-plt.loglog(epsilon1, vhciscf_err, "o-", label=label[0])
-plt.loglog([1e-3, 5e-4, 1e-4, 1e-5], vhciscf_aa_err, "o-", label=label[1])
-plt.loglog(epsilon1, hciscf_err, "o-", label=label[2])
-plt.loglog([1e-3, 5e-4, 1e-4, 1e-5], hciscf_aa_err, "o-", label=label[3])
-
-
 # Plot Gaussian tolerances
 gau_tol = [1.7e-3, 3e-4, 1e-5]
 gau_label = ["Gau. Loose", "Gau. Default", "Gau. Tight"]
@@ -69,7 +63,13 @@ for i, tol in enumerate(gau_tol):
         tol, label=gau_label[i], linewidth=2, linestyle=styles[i], color="k"
     )
 
-plt.xlim((epsilon1[0] * 1.1, epsilon1[-1]))
+plt.loglog(epsilon1, vhciscf_err, "o-", label=label[0])
+plt.loglog(epsilon1, vhciscf_aa_err, "o-", label=label[1])
+plt.loglog(epsilon1, hciscf_err, "o-", label=label[2])
+plt.loglog(epsilon1, hciscf_aa_err, "o-", label=label[3])
+
+
+plt.xlim((1.1e-3, 9e-7))
 plt.xlabel(r"$\epsilon_1$ (Ha)")
 plt.ylabel("RMS Gradient Error (Ha/Bohr)")
 plt.title(r"Gradient Error as a Function of $\epsilon_1$")
@@ -79,4 +79,3 @@ plt.legend(framealpha=1.0)
 plt.tight_layout()
 plt.savefig("_figs/ni_edt2_eps1_conv.pdf")
 plt.savefig("_figs/ni_edt2_eps1_conv.png", dpi=600)
-

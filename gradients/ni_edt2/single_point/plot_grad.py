@@ -18,7 +18,7 @@ def rms_error(g1: np.ndarray, g2: np.ndarray) -> float:
 # eps1 = 1e-3
 casscf = np.load("_data/grad_casscf.npy")
 
-for eps1 in [5e-4]:
+for eps1 in [1e-3, 5e-4]:
     vhciscf = np.load(f"_data/grad_vhciscf_{eps1:.1e}.npy")
     vhciscf_aa = np.load(f"_data/grad_vhciscf_aa_{eps1:.1e}.npy")
     hciscf = np.load(f"_data/grad_hciscf_{eps1:.1e}.npy")
