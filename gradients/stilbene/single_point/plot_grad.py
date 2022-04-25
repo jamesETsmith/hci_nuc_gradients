@@ -19,9 +19,8 @@ def rms_error(g1: np.ndarray, g2: np.ndarray) -> float:
 # eps1 = 1e-3
 casscf = np.load("_data/grad_casscf.npy")
 
-raw_im = plt.imread("../stilbene.png")
 
-for eps1 in [1e-3, 2e-3, 5e-4]:
+for eps1 in [1e-3, 5e-4]:
     vhciscf = np.load(f"_data/grad_vhciscf_{eps1:.1e}.npy")
     vhciscf_aa = np.load(f"_data/grad_vhciscf_aa_{eps1:.1e}.npy")
     hciscf = np.load(f"_data/grad_hciscf_{eps1:.1e}.npy")
@@ -51,16 +50,9 @@ for eps1 in [1e-3, 2e-3, 5e-4]:
     set_palette(4)
     set_context("paper", font_scale=1.25)
 
-
-
     sns.barplot(np.arange(len(shci_errors)), shci_errors)
-
-    im = OffsetImage(raw_im, zoom=.45)
-    ab = AnnotationBbox(im, (1, 0), xycoords='axes fraction', box_alignment=(1.1,-0.1))
-    plt.gca().add_artist(ab)
-
+ 
     plt.xticks(np.arange(len(tick_label)), tick_label)
-
     plt.ylabel("RMS Gradient Error (Ha/Bohr)")
     plt.title("Gradient Error as a Function of Method Variant")
     plt.tight_layout()

@@ -11,8 +11,7 @@ from pyscf import gto, scf, dft, mp, mcscf, grad
 from pyscf.shciscf import shci
 
 
-
-def run_stilbene(eps1:float, hci_type:str, aa:bool):
+def run_stilbene(eps1: float, hci_type: str, aa: bool):
     """
     Set up the stilbene molecule.
 
@@ -57,17 +56,21 @@ def run_stilbene(eps1:float, hci_type:str, aa:bool):
 
     ncas = 14
     nelecas = 14
+    eps2 = 1e-8
+    n_procs = os.environ["DICE_N_PROCS"]
 
     mf.mo_coeff = natorbs
     mc = mcscf.CASSCF(mf, ncas, nelecas)
     mc.conv_tol = 1e-10
     mc.conv_tol_grad = 1e-5
-    mc.fcisolver = shci.SHCI(mc.mol)
-    mc.fcisolver.sweep_epsilon = [eps1]
-    mc.fcisolver.sweep_iter = [0]
-    mc.fcisolver.scratchDirectory = "/tmp"
-    mc.fcisolver.runtimeDir = "/tmp"
-    mc.fcisolver.mpiprefix = "mpirun -np 64"
+
+    if hci_type != "CASSCF":
+        mc.fcisolver = shci.SHCI(mc.mol)
+        mc.fcisolver.sweep_epsilon = [eps1] * 3
+        mc.fcisolver.sweep_iter = [0, 6, 12]
+        mc.fcisolver.scratchDirectory = "/tmp"
+        mc.fcisolver.runtimeDir = "/tmp"
+        mc.fcisolver.mpiprefix = f"mpirun -np {n_procs}"
 
     if hci_type == "vHCISCF" and not aa:
         mc.mc2step()
@@ -79,31 +82,33 @@ def run_stilbene(eps1:float, hci_type:str, aa:bool):
 
         mc.internal_rotation = True
         mc.max_cycle_macro = 200
-        mc.conv_tol = 1e-10
+        mc.conv_tol = 1e-9
         mc.conv_tol_grad = 1e-4
         mc.mc2step()
 
     elif hci_type == "HCISCF" and not aa:
         mc.fcisolver.stochastic = False
-        mc.fcisolver.epsilon2 = 1e-12
+        mc.fcisolver.epsilon2 = eps2
         mc.mc2step()
 
     elif hci_type == "HCISCF" and aa:
         mc.fcisolver.stochastic = False
-        mc.fcisolver.epsilon2 = 1e-12
+        mc.fcisolver.epsilon2 = eps2
         mc.conv_tol = 1e-8
         mc.conv_tol_grad = 2e-4
         mc.mc2step()
 
         mc.internal_rotation = True
         mc.max_cycle_macro = 200
-        mc.conv_tol = 1e-10
+        mc.conv_tol = 1e-9
         mc.conv_tol_grad = 1e-4
+        mc.mc2step()
+
+    elif hci_type == "CASSCF":
         mc.mc2step()
 
     grad = mc.Gradients().kernel()
     np.save(f"_data/{outputbase}", grad)
-
 
 
 if __name__ == "__main__":
@@ -112,7 +117,7 @@ if __name__ == "__main__":
     # fmt: off
     parser = argparse.ArgumentParser(description="""This script runs an vHCISCF gradient calculations.""")
     parser.add_argument("--eps1", help="Epsilon 1 for the HCI calculation", type=float, required=True)
-    parser.add_argument("--hci_type", help="The type of HCI to use, i.e. vHCISCF, HCISCF", type=str, choices=["vHCISCF", "HCISCF"], required=True)
+    parser.add_argument("--hci_type", help="The type of HCI to use, i.e. vHCISCF, HCISCF", type=str, choices=["vHCISCF", "HCISCF", "CASSCF"], required=True)
     parser.add_argument("--aa", help="Whether to use active-active rotations.", default=False, action="store_true")
     args = parser.parse_args()
     # fmt: on

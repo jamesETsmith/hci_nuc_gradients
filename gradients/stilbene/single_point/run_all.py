@@ -65,13 +65,13 @@ def make_stilbene(output: str = None) -> mcscf.CASSCF:
 os.makedirs("_logs", exist_ok=True)
 os.makedirs("_data", exist_ok=True)
 
-CASSCF = 0
+CASSCF = 1
 vHCISCF = 1
 vHCISCF_AA = 1
 HCISCF = 1
 HCISCF_AA = 1
 
-epsilon1 = 5e-4
+epsilon1 = 1e-3
 
 #
 # CASSCF
@@ -90,8 +90,8 @@ if CASSCF:
 if vHCISCF:
     mc2 = make_stilbene(f"_logs/vhciscf_{epsilon1:.1e}.out")
     mc2.fcisolver = shci.SHCI(mc2.mol)
-    mc2.fcisolver.sweep_epsilon = [epsilon1]
-    mc2.fcisolver.sweep_iter = [0]
+    mc2.fcisolver.sweep_epsilon = [epsilon1]*3
+    mc2.fcisolver.sweep_iter = [0, 6, 12]
     mc2.fcisolver.scratchDirectory = "/tmp"
     mc2.mc2step()
 
@@ -105,8 +105,8 @@ if vHCISCF:
 if vHCISCF_AA:
     mc3 = make_stilbene(f"_logs/vhciscf_aa_{epsilon1:.1e}.out")
     mc3.fcisolver = shci.SHCI(mc3.mol)
-    mc3.fcisolver.sweep_epsilon = [epsilon1]
-    mc3.fcisolver.sweep_iter = [0]
+    mc3.fcisolver.sweep_epsilon = [epsilon1]*3
+    mc3.fcisolver.sweep_iter = [0, 6, 12]
     mc3.fcisolver.scratchDirectory = "/tmp"
     mc3.conv_tol = 1e-8
     mc3.conv_tol_grad = 2e-4
@@ -130,8 +130,8 @@ if vHCISCF_AA:
 if HCISCF:
     mc4 = make_stilbene(f"_logs/hciscf_{epsilon1:.1e}.out")
     mc4.fcisolver = shci.SHCI(mc4.mol)
-    mc4.fcisolver.sweep_epsilon = [epsilon1]
-    mc4.fcisolver.sweep_iter = [0]
+    mc4.fcisolver.sweep_epsilon = [epsilon1]*3
+    mc4.fcisolver.sweep_iter = [0, 6, 12]
     mc4.fcisolver.scratchDirectory = "/tmp"
     mc4.fcisolver.stochastic = False
     mc4.fcisolver.epsilon2 = 1e-12
@@ -147,8 +147,8 @@ if HCISCF:
 if HCISCF_AA:
     mc5 = make_stilbene(f"_logs/hciscf_aa_{epsilon1:.1e}.out")
     mc5.fcisolver = shci.SHCI(mc5.mol)
-    mc5.fcisolver.sweep_epsilon = [epsilon1]
-    mc5.fcisolver.sweep_iter = [0]
+    mc5.fcisolver.sweep_epsilon = [epsilon1]*3
+    mc5.fcisolver.sweep_iter = [0, 6, 12]
     mc5.fcisolver.scratchDirectory = "/tmp"
     mc5.fcisolver.stochastic = False
     mc5.fcisolver.epsilon2 = 1e-12
