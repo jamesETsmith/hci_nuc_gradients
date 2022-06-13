@@ -1,3 +1,4 @@
+import sys
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -8,6 +9,11 @@ ha_to_kcalmol = (
     physical_constants["hartree-joule relationship"][0] / calorie * N_A / 1e3
 )
 
+sys.path.append("../../hciscf/analysis/")
+from plotting_utils import set_palette, set_context
+
+# WARNING LATEX NEEDS TO BE IN YOUR PATH TOO
+
 #
 # Plot General Comparison
 #
@@ -16,9 +22,10 @@ df = pd.read_csv("_data/dft_general.csv")
 
 
 fig = plt.figure()
-sns.set_style("ticks")
-sns.set_palette(sns.color_palette(["#" + x for x in ["444444", "ff4343", "3725ff"]]))
-
+# sns.set_style("ticks")
+# sns.set_palette(sns.color_palette(["#" + x for x in ["444444", "ff4343", "3725ff"]]))
+set_palette(3)
+set_context("paper", font_scale=1.25)
 
 # Plot energy
 ax1 = plt.subplot(1, 2, 1)
@@ -38,6 +45,15 @@ df["Energy (Ha)"] = (
     )
     * ha_to_kcalmol
 )
+
+df["Species"] = [
+    f"({m},${g}$)" for m, g in zip(df["Multiplicity"], df["Starting Geometry"])
+]
+
+# Drop B data
+df = df.drop(axis=0, index=[1, 4, 7])
+print(df)
+
 sns.catplot(
     kind="point",
     data=df,
