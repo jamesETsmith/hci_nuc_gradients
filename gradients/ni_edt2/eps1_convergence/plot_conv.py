@@ -17,25 +17,21 @@ def rms_error(g1: np.ndarray, g2: np.ndarray) -> float:
 #
 # Load Data
 #
-epsilon1 = [5e-3, 1e-3, 1e-4, 1e-5, 1e-6]
+epsilon1 = [1e-3, 5e-4, 1e-4, 1e-5, 1e-6]
 casscf = np.load("../single_point/_data/grad_casscf.npy")
 
-vhciscf = [
-    np.loadtxt("_data/vhciscf_{}.txt".format(eps1))
-    for eps1 in epsilon1
-]
+vhciscf = [np.load("_data/vhciscf_{:.1e}.npy".format(eps1)) for eps1 in epsilon1]
 vhciscf_err = [rms_error(shci, casscf) for shci in vhciscf]
 
-vhciscf_aa = [np.loadtxt("_data/vhciscf_aa_{}.txt".format(eps1)) for eps1 in epsilon1]
+vhciscf_aa = [np.load("_data/vhciscf_aa_{:.1e}.npy".format(eps1)) for eps1 in epsilon1]
 vhciscf_aa_err = [rms_error(shci, casscf) for shci in vhciscf_aa]
 
-hciscf = [
-    np.loadtxt("_data/hciscf_{}.txt".format(eps1))
-    for eps1 in epsilon1
-]
+
+hciscf = [np.load("_data/hciscf_{:.1e}.npy".format(eps1)) for eps1 in epsilon1]
 hciscf_err = [rms_error(shci, casscf) for shci in hciscf]
 
-hciscf_aa = [np.loadtxt("_data/hciscf_aa_{}.txt".format(eps1)) for eps1 in epsilon1]
+# epsilon1 = [1e-3, 5e-4]
+hciscf_aa = [np.load("_data/hciscf_aa_{:.1e}.npy".format(eps1)) for eps1 in epsilon1]
 hciscf_aa_err = [rms_error(shci, casscf) for shci in hciscf_aa]
 
 
@@ -73,14 +69,13 @@ plt.loglog(epsilon1, hciscf_err, "o-", label=label[2])
 plt.loglog(epsilon1, hciscf_aa_err, "o-", label=label[3])
 
 
-# plt.xlim((epsilon1[0] * 1.1, epsilon1[-1]))
-plt.xlim((6e-3, 9e-7))
+plt.xlim((1.1e-3, 9e-7))
 plt.xlabel(r"$\epsilon_1$ (Ha)")
 plt.ylabel("RMS Gradient Error (Ha/Bohr)")
 plt.title(r"Gradient Error as a Function of $\epsilon_1$")
-# plt.ylim((1e-6, 3e-2))
+plt.ylim((1e-6, 3e-2))
 plt.legend(framealpha=1.0)
 
 plt.tight_layout()
-plt.savefig("_figs/n2_eps1_conv.pdf")
-plt.savefig("_figs/n2_eps1_conv.png", dpi=600)
+plt.savefig("_figs/ni_edt2_eps1_conv.pdf")
+plt.savefig("_figs/ni_edt2_eps1_conv.png", dpi=600)
